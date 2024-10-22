@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      args:
+        USER: jhon
+        GROUP: jhon
+        UID: 1000
+        GID: 1000
+    container_name: app-php
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel
+
+  mysql:
+    image: mariadb:latest
+    container_name: app-mariadb
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_USER: ${DB_USERNAME}
+    volumes:
+      - ./docker/db:/docker-entrypoint-initdb.d //se precisar rodar um SQL inicial criar esse arquivo no diretorio
+    networks:
+      - laravel
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: app-mailpit
+    ports:
+      - "8025:8025"   # Interface web do Mailpit
+      - "1025:1025"   # Porta SMTP para envio de e-mails
+    volumes:
+      - ./docker/mailpit-data:/data
+    environment:
+      - MAILPIT_SMTP_BIND_ADDR=0.0.0.0:1025
+      - MAILPIT_HTTP_BIND_ADDR=0.0.0.0:8025
+    networks:
+      - laravel
+
+  nginx:
+    image: nginx:latest
+    container_name: app-nginx
+    restart: unless-stopped
+    ports:
+      - 9000:80
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel
+
+  redis:
+    image: redis:latest
+    container_name: app-redis
+    command: ["redis-server"]
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
