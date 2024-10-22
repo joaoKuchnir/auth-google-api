@@ -15,7 +15,7 @@ A aplicação oferece as seguintes funcionalidades:
 
 **2ª Etapa:**
 - Recebe os dados finais de cadastro do usuário (data de nascimento, CPF e nova senha).
-- Redireciona para uma URL externa com os dados processados.
+- Redireciona para uma URL externa.
 
 ### Notificação por Email
 - Após o término do cadastro, um email de boas-vindas é enviado ao usuário.
