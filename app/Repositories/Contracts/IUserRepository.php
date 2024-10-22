@@ -11,7 +11,7 @@ interface IUserRepository
 
     public function createOrUpdate(array $userData, string $token): User;
     public function update(array $userData, string $id);
-    public function getAll(): LengthAwarePaginator;
+    public function getAll(array $filters): LengthAwarePaginator;
     public function findByEmail(string $email): User|null;
 
 }

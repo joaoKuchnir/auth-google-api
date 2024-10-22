@@ -11,7 +11,7 @@ interface IUserService
     public function __construct(UserRepository $userRepository);
     public function updateOrCreateUser(array $userData, string $token): User;
     public function updateUser(array $userData, string $id): User;
-    public function getAllUsers(): LengthAwarePaginator;
+    public function getAllUsers(array $filters): LengthAwarePaginator;
     public function formatDate(array $userData): string|null;
 
 }

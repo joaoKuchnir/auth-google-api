@@ -71,10 +71,20 @@ class UserRepository implements IUserRepository
      * @return LengthAwarePaginator
      */
 
-    public function getAll(): LengthAwarePaginator
+    public function getAll(array $filters = null): LengthAwarePaginator
     {
+
         return User::where('registration_finished', 1)
-            ->orderBy('id', 'desc')->paginate(9);
+            ->when(!empty($filters['name']), function ($query) use ($filters)
+            {
+                $query->where('name', 'like', '%' . $filters['name'] . '%');
+            })
+            ->when(!empty($filters['cpf']), function ($query) use ($filters)
+            {
+                $query->where('cpf', 'like', '%' . $filters['cpf'] . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(9);
     }
 
     /**

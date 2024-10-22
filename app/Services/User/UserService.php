@@ -58,16 +58,18 @@ class UserService implements IUserService
     }
 
     /**
-     * Try get all users
+     * Try get all users or filtred users
      * 
-     * @return 
+     * @param array $filters
+     * @throws \Exception
+     * @return LengthAwarePaginator
      */
-    public function getAllUsers(): LengthAwarePaginator
+    public function getAllUsers(array $filters = null): LengthAwarePaginator
     {
 
         try {
 
-            return $this->userRepository->getAll();
+            return $this->userRepository->getAll(filters: $filters);
 
         } catch ( \Exception $e ) {
 

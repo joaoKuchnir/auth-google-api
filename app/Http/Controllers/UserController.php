@@ -15,10 +15,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        // dd($request->all());
 
-        $users = $this->userService->getAllUsers();
+        $filters = $request->only('page', 'name', 'cpf');
+
+        $users = $this->userService->getAllUsers($filters);
 
         return response()->json([
             'success' => true,
